@@ -2,16 +2,13 @@ package com.example.demo.model.appuser;
 
 import com.example.demo.model.appuser.AppUserRole;
 import com.example.demo.model.appuser.AppUserZiele;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
-
+@ToString
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -27,7 +24,7 @@ public class AppUser implements UserDetails {
             strategy = GenerationType.SEQUENCE,
             generator = "app_user_generator"
     )
-    private int id ;
+    private long id ;
     private String name;
     private String userName;
     private String email;
@@ -49,6 +46,14 @@ public class AppUser implements UserDetails {
         this.appUserRole=appUserRole;
         this.gewicht=gewicht;
     }
+
+    public AppUser(String nAme, String name, String email) {
+        this.name=name;
+        this.userName=userName;
+        this.email=email;
+    }
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -61,21 +66,21 @@ public class AppUser implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

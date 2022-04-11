@@ -10,6 +10,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+
 @Service
 @AllArgsConstructor
 public class AppUserService implements UserDetailsService {
@@ -20,6 +24,17 @@ private final BCryptPasswordEncoder bCryptPasswordEncoder;
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return appUserRepo.findByEmail(email).orElseThrow(()-> new UsernameNotFoundException(String.format(USER_NOT_FOUND,email)));
     }
+    public AppUser getUser(long id){
+        AppUser appUser = appUserRepo.findById(id).get();
+
+        return appUser;
+    }
+    public String getUserName(long id){
+        AppUser appUser = appUserRepo.findById(id).get();
+
+        return appUser.getName()+appUser.getEmail()+appUser.getUsername();
+    }
+
 
     public String singUpUser(AppUser appUser){
         boolean userExists = appUserRepo.findByEmail(appUser.getEmail()).isPresent();
