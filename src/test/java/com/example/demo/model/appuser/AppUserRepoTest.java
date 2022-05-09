@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 
 class AppUserRepoTest {
-
+/*
 
     @Autowired
      AppUserRepo appUserRepos;
@@ -33,6 +33,6 @@ public void emailValTest(){
     boolean exist  = appUserRepos.findByEmail("email").isPresent();
     assertFalse(exist);
 }
-
+*/
 
 }
