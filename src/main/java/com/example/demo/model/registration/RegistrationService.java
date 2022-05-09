@@ -16,17 +16,19 @@ public class RegistrationService {
     private final EmailSender emailSender;
     public String register(RegistrationRequest request){
         boolean isValidEmail= emailValidator.test(request.getEmail());
-
+        boolean emailBelegt= appUserService.emailNichtBelegt(request.getEmail());
         if(!isValidEmail){
-            throw new IllegalStateException("email not vail");
+            throw new IllegalStateException("Email kein richtiges Format");
         }
-        String link="";
+
+
+        /*String link="";
         emailSender.send(
                 request.getEmail(),
                 buildEmail(request.getName(), link));
+*/
 
-
-        return appUserService.singUpUser(new AppUser(request.getName(),request.getUserName(),request.getEmail(),request.getPassword(),request.getAppUserZiele(),request.getGroesse(), AppUserRole.NORMAL,request.getGewicht()));
+        return appUserService.singUpUser(new AppUser(request.getName(),request.getUserName(),request.getEmail(),request.getPassword(),request.getAppUserZiele(),request.getGroesse(), AppUserRole.NORMAL,request.getGewicht(),request.getGeburtsdatum(), request.getGender()));
     }
 
     private String buildEmail(String name, String link) {
