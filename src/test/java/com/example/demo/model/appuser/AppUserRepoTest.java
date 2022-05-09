@@ -12,7 +12,7 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@DataJpaTest
+//@DataJpaTest
 
 class AppUserRepoTest {
 /*
