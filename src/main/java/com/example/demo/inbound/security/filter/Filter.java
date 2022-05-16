@@ -1,42 +1,45 @@
 package com.example.demo.inbound.security.filter;
-
-import com.auth0.jwt.algorithms.Algorithm;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
+import com.example.demo.inbound.security.JwtUtil;
+import com.example.demo.model.appuser.AppUserService;
+import lombok.AllArgsConstructor;
+import org.springframework.boot.actuate.endpoint.SecurityContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
+import  org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-public class Filter extends UsernamePasswordAuthenticationFilter {
-
-
-    private final AuthenticationManager authenticationManager;
-    @Autowired
-    public Filter(AuthenticationManager authentication){
-        this.authenticationManager=authentication;
-    }
-
+@AllArgsConstructor
+@Component
+public class Filter extends OncePerRequestFilter{
+private AppUserService appUserService;
+private JwtUtil jwtUtil;
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email,password);
-    return authenticationManager.authenticate(authenticationToken);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    final String authorzitaionHeader=request.getHeader("Authorization");
+    String email= null;
+    String jwt=null;
+    if(authorzitaionHeader!=null&&authorzitaionHeader.startsWith("Bearer ")){
+        jwt= authorzitaionHeader.substring(7);
+        email=jwtUtil.extractUsername(jwt);
     }
+    if(email!= null&& SecurityContextHolder.getContext().getAuthentication()==null){
+        UserDetails userDetails=this.appUserService.loadUserByUsername(email);
+        if(jwtUtil.validateToken(jwt, userDetails)){
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken=new UsernamePasswordAuthenticationToken(
+                 userDetails,null,userDetails.getAuthorities());
+            usernamePasswordAuthenticationToken
+                    .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
-    @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
-
-        User user= (User) authentication.getPrincipal();
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+        }
+    }
+        filterChain.doFilter(request,response);
     }
 }

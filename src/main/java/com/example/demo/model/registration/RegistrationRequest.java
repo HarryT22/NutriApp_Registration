@@ -3,6 +3,7 @@ package com.example.demo.model.registration;
 import com.example.demo.model.appuser.AppUserRole;
 import com.example.demo.model.appuser.AppUserZiele;
 import com.example.demo.model.appuser.Gender;
+import com.example.demo.model.appuser.Role;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class RegistrationRequest {
     private final short gewicht;
     private final String geburtsdatum;
     private final Gender gender;
+    private final Role role;
 
 
 }

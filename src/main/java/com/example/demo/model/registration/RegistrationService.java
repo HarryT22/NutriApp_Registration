@@ -5,6 +5,7 @@ import com.example.demo.model.appuser.AppUser;
 import com.example.demo.model.appuser.AppUserRole;
 import com.example.demo.model.appuser.AppUserService;
 
+import com.example.demo.model.appuser.Role;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,7 @@ public class RegistrationService {
                 buildEmail(request.getName(), link));
 */
 
-        return appUserService.singUpUser(new AppUser(request.getName(),request.getUserName(),request.getEmail(),request.getPassword(),request.getAppUserZiele(),request.getGroesse(), AppUserRole.NORMAL,request.getGewicht(),request.getGeburtsdatum(), request.getGender()));
+        return appUserService.singUpUser(new AppUser(request.getName(),request.getUserName(),request.getEmail(),request.getPassword(),request.getAppUserZiele(),request.getGroesse(), AppUserRole.NORMAL,request.getGewicht(),request.getGeburtsdatum(), request.getGender(), Role.NORMAL));
     }
 
     private String buildEmail(String name, String link) {

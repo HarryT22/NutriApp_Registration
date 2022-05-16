@@ -2,7 +2,6 @@ package com.example.demo.model.appuser;
 
 import com.example.demo.model.appuser.AppUserRole;
 import com.example.demo.model.appuser.AppUserZiele;
-import com.example.demo.model.role.Role;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 import org.springframework.data.repository.cdi.Eager;
@@ -26,7 +25,6 @@ import java.util.Date;
 @Table(name="user_data")
 public class AppUser implements UserDetails {
 
-
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE)
     private long id ;
@@ -43,9 +41,10 @@ public class AppUser implements UserDetails {
     @Column(name = "Ziele")
     @Enumerated(EnumType.STRING)
     private AppUserZiele appUserZiele ;
-    @Column(name = "Groeße")
+    @Column(name = "Groesse")
     private short groesse;
-    @Column(name = "Role")
+
+    @Column(name = "AppRole")
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
     @Column(name = "Gewicht")
@@ -57,12 +56,14 @@ public class AppUser implements UserDetails {
     @Column(name = "Gender")
     @Enumerated(EnumType.STRING)
     private Gender gender;
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<Role> roles= new ArrayList<>();
+
+    @Column(name="Role")
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
 
     public AppUser(String name, String userName, String email, String password, AppUserZiele appUserZiele, short groesse, AppUserRole appUserRole, short gewicht
-    , String geburtsdatum , Gender gender){
+    , String geburtsdatum , Gender gender,Role role){
     this.name=name;
         this.userName=userName;
         this.email=email;
@@ -73,6 +74,7 @@ public class AppUser implements UserDetails {
         this.gewicht=gewicht;
         this.geburtsdatum=geburtsdatum;
         this.gender=gender;
+        this.role=role;
     }
 
     public AppUser(String nAme, String name, String email) {
