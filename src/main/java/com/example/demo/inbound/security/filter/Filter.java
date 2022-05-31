@@ -1,4 +1,4 @@
-package com.example.demo.inbound.security.filter;
+/*package com.example.demo.inbound.security.filter;
 import com.example.demo.inbound.security.JwtUtil;
 import com.example.demo.model.appuser.AppUserService;
 import lombok.AllArgsConstructor;
@@ -37,9 +37,9 @@ private JwtUtil jwtUtil;
             usernamePasswordAuthenticationToken
                     .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-
         }
     }
         filterChain.doFilter(request,response);
     }
 }
+*/

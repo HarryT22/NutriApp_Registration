@@ -1,5 +1,11 @@
 package com.example.demo.model.appuser;
 
-public enum Role {
-    NORMAL,ADMIN;
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Role implements GrantedAuthority {
+    NORMAL,ADMIN,PREMIUM;
+    @Override
+    public String getAuthority(){
+        return name();
+    }
 }

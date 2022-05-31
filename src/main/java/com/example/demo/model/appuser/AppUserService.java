@@ -4,6 +4,8 @@ package com.example.demo.model.appuser;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,11 +25,13 @@ import static com.example.demo.model.appuser.Role.ADMIN;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class AppUserService implements UserDetailsService {
 private final static String USER_NOT_FOUND="user with email %s not found";
 private final AppUserRepo appUserRepo;
 private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    @Override
+
+@Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         AppUser appUser= appUserRepo.findByEmail(email).orElseThrow(()-> new UsernameNotFoundException(String.format(USER_NOT_FOUND,email)));
@@ -38,7 +43,7 @@ private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
         return appUser;
     }
-    public boolean safeUser(long id, AppUser appUser){
+    public boolean safeUser(AppUser appUser){
 
         appUserRepo.save(appUser);
         return true;
@@ -57,12 +62,27 @@ private final BCryptPasswordEncoder bCryptPasswordEncoder;
         }
         return false;
     }
+    public AppUser getUser(String email){
+        AppUser appUser = appUserRepo.findByEmail(email).get();
+
+        return appUser;
+    }
+    public Role login(String email,String password){
+        try {
+            AppUser appUser = appUserRepo.findByEmail(email).get();
+            return appUser.getRole();
+        } catch (Exception e) {
+            throw new IllegalStateException("Invalid username or password.");
+        }
+
+    }
     public String getUserName(long id){
         AppUser appUser = appUserRepo.findById(id).get();
 
-        return appUser.getName()+appUser.getEmail()+appUser.getUsername();
+        return appUser.getUsername();
     }
-    public boolean emailNichtBelegt(String email){
+    /* Should return true if email is aviable*/
+    public boolean emailNotTaken(String email){
         boolean userExists = appUserRepo.findByEmail(email).isPresent();
         if(userExists){
             throw  new IllegalStateException("Email schon belegt");

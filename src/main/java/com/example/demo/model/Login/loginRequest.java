@@ -12,17 +12,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class RegistrationRequest {
-    private final String name;
-    private final String userName;
+public class loginRequest {
     private  final String email;
-    private final String password;
-    private final  AppUserZiele appUserZiele ;
-    private final short groesse;
-    private final short  gewicht;
-    private final String geburtsdatum;
-    private final Gender gender;
     private final Role role;
-
+    private final String password;
 
 }

@@ -1,6 +1,8 @@
 package com.example.demo.inbound.security.config;
-import com.example.demo.inbound.security.filter.Filter;
-import com.example.demo.model.appuser.AppUserService;
+import com.example.demo.inbound.security.JwtTokenFilter;
+import com.example.demo.inbound.security.JwtTokenFilterConfigurer;
+import com.example.demo.inbound.security.JwtTokenProvider;
+
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
@@ -21,39 +24,52 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final AppUserService appUserService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final Filter filter;
+
+
+    private  JwtTokenProvider jwtTokenProvider;
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.authorizeRequests()
-                .antMatchers("/user/login").permitAll()
                 .antMatchers("/api/v1/registration").permitAll()
+                .antMatchers("/user/login").permitAll()
                 .antMatchers("/actuator/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/user/{id}/settings").permitAll()
                 .anyRequest().authenticated()
-                .and().csrf().disable();
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .permitAll()
+                .defaultSuccessUrl("/homepage", true)
+                .and()
+                .logout()
+                .permitAll().and().csrf().disable();
+
         httpSecurity.headers().frameOptions().disable();
-    httpSecurity.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.apply(new JwtTokenFilterConfigurer(jwtTokenProvider));
+        JwtTokenFilter customFilter = new JwtTokenFilter(jwtTokenProvider);
+        httpSecurity.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
+
 
     }
-
-    @Override
+/*
+   @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(appUserService).passwordEncoder(bCryptPasswordEncoder);
     }
-
+*/
     /*
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(daoAuthenticationProvider());
     }*/
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }/*
+   /*
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();

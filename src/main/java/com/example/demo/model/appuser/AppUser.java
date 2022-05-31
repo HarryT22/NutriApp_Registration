@@ -1,19 +1,13 @@
 package com.example.demo.model.appuser;
 
-import com.example.demo.model.appuser.AppUserRole;
-import com.example.demo.model.appuser.AppUserZiele;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
-import org.springframework.data.repository.cdi.Eager;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 @Data
 @ToString
@@ -26,8 +20,9 @@ import java.util.Date;
 public class AppUser implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
-    private long id ;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private long Id ;
+
     @Column(name = "Name")
     private String name;
     @Column(name = "User_name")
@@ -44,9 +39,6 @@ public class AppUser implements UserDetails {
     @Column(name = "Groesse")
     private short groesse;
 
-    @Column(name = "AppRole")
-    @Enumerated(EnumType.STRING)
-    private AppUserRole appUserRole;
     @Column(name = "Gewicht")
     private short gewicht;
 
@@ -62,7 +54,7 @@ public class AppUser implements UserDetails {
     private Role role;
 
 
-    public AppUser(String name, String userName, String email, String password, AppUserZiele appUserZiele, short groesse, AppUserRole appUserRole, short gewicht
+    public AppUser(String name, String userName, String email, String password, AppUserZiele appUserZiele, short groesse, short gewicht
     , String geburtsdatum , Gender gender,Role role){
     this.name=name;
         this.userName=userName;
@@ -70,17 +62,17 @@ public class AppUser implements UserDetails {
         this.password=password;
         this.appUserZiele=appUserZiele;
         this.groesse=groesse;
-        this.appUserRole=appUserRole;
+
         this.gewicht=gewicht;
         this.geburtsdatum=geburtsdatum;
         this.gender=gender;
         this.role=role;
     }
 
-    public AppUser(String nAme, String name, String email) {
-        this.name=name;
+    public AppUser( String name, String email, String password) {
         this.userName=userName;
         this.email=email;
+        this.password=password;
     }
 
 

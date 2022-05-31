@@ -1,26 +1,35 @@
 package com.example.demo.inbound;
 
+import com.example.demo.inbound.security.JwtTokenProvider;
 import com.example.demo.model.appuser.AppUser;
 import com.example.demo.model.appuser.AppUserRepo;
 import com.example.demo.model.appuser.AppUserService;
+import com.example.demo.model.appuser.Role;
 import com.example.demo.model.registration.RegistrationRequest;
+import com.example.demo.model.registration.loginRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping(path="user")
 @AllArgsConstructor
 public class AppUserController {
    private final AppUserService  appUserService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
+    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthenticationManager authenticationManager;
 @PatchMapping("/{id}/settings")
   public boolean changeSettings(@PathVariable("id") long id,@RequestBody RegistrationRequest request) {
     AppUser appUser = appUserService.getUser(id);
@@ -58,14 +67,22 @@ public class AppUserController {
 
         appUser.setGeburtsdatum(request.getGeburtsdatum());
     }
-    else{return false;}
-    appUserService.safeUser(id,appUser);
+    appUserService.safeUser(appUser);
     return true;
 }
-@GetMapping("Hello")
-public String test(){
-    return "YO GUNE";
+
+@PostMapping("/login")
+public String login(@RequestBody loginRequest request) {
+    try {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        AppUser appUser = appUserService.getUser(request.getEmail());
+        return  jwtTokenProvider.createJwt(request.getEmail(), appUser.getRole().getAuthority());
+    } catch (Exception e) {
+        throw new IllegalStateException("Invalid username or password.");
+    }
 }
+
+
         @GetMapping("/{id}")
 public ResponseEntity<String> getUser(@PathVariable("id") long id) throws IllegalAccessError{
    if(appUserService.isAdmin(id)){

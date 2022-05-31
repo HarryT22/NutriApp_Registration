@@ -2,7 +2,6 @@ package com.example.demo.model.registration;
 
 import com.example.demo.inbound.email.EmailSender;
 import com.example.demo.model.appuser.AppUser;
-import com.example.demo.model.appuser.AppUserRole;
 import com.example.demo.model.appuser.AppUserService;
 
 import com.example.demo.model.appuser.Role;
@@ -17,7 +16,7 @@ public class RegistrationService {
     private final EmailSender emailSender;
     public String register(RegistrationRequest request){
         boolean isValidEmail= emailValidator.test(request.getEmail());
-        boolean emailBelegt= appUserService.emailNichtBelegt(request.getEmail());
+        boolean emailBelegt= appUserService.emailNotTaken(request.getEmail());
         if(!isValidEmail){
             throw new IllegalStateException("Email kein richtiges Format");
         }
@@ -29,7 +28,7 @@ public class RegistrationService {
                 buildEmail(request.getName(), link));
 */
 
-        return appUserService.singUpUser(new AppUser(request.getName(),request.getUserName(),request.getEmail(),request.getPassword(),request.getAppUserZiele(),request.getGroesse(), AppUserRole.NORMAL,request.getGewicht(),request.getGeburtsdatum(), request.getGender(), Role.NORMAL));
+        return appUserService.singUpUser(new AppUser(request.getName(),request.getUserName(),request.getEmail(),request.getPassword(),request.getAppUserZiele(),request.getGroesse(), request.getGewicht(),request.getGeburtsdatum(), request.getGender(), Role.NORMAL));
     }
 
     private String buildEmail(String name, String link) {
