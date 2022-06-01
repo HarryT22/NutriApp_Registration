@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+/*import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,7 +34,6 @@ public class LoginTest {
     private MockMvc mockMvc;
 @MockBean
 private AppUserService appUserService;
-
 private AppUser appUser;
 @BeforeEach
     public void loging() throws Exception{
@@ -53,3 +52,4 @@ private AppUser appUser;
                     .andExpect(status().isOk());
 }
 }
+*/

@@ -28,8 +28,8 @@ import static com.example.demo.model.appuser.Role.ADMIN;
 @Transactional
 public class AppUserService implements UserDetailsService {
 private final static String USER_NOT_FOUND="user with email %s not found";
-private final AppUserRepo appUserRepo;
-private final BCryptPasswordEncoder bCryptPasswordEncoder;
+private  AppUserRepo appUserRepo;
+private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -37,11 +37,6 @@ private final BCryptPasswordEncoder bCryptPasswordEncoder;
         AppUser appUser= appUserRepo.findByEmail(email).orElseThrow(()-> new UsernameNotFoundException(String.format(USER_NOT_FOUND,email)));
         Collection<SimpleGrantedAuthority> authorires = new ArrayList<>();
         return new org.springframework.security.core.userdetails.User(appUser.getUsername(), appUser.getPassword(),authorires);
-    }
-    public AppUser getUser(long id){
-        AppUser appUser = appUserRepo.findById(id).get();
-
-        return appUser;
     }
     public boolean safeUser(AppUser appUser){
 
@@ -55,12 +50,18 @@ private final BCryptPasswordEncoder bCryptPasswordEncoder;
         }
         return false;
     }
+
     public boolean  isAdmin(String email){
         AppUser appUser = appUserRepo.findByEmail(email).get();
         if(appUser.getRole()==ADMIN){
             return true;
         }
         return false;
+    }
+    public AppUser getUser(long id){
+        AppUser appUser = appUserRepo.findById(id).get();
+
+        return appUser;
     }
     public AppUser getUser(String email){
         AppUser appUser = appUserRepo.findByEmail(email).get();
