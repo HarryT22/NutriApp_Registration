@@ -5,23 +5,142 @@
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+
 		{
-			"name": "DummyTest",
+			"name": "http://localhost:8080/api/v1/registration",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "www.fh-muenster.de",
-					"host": [
-						"www",
-						"fh-muenster",
-						"de"
-					]
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n\t\"name\":\"daniel\",\n\t\"userName\":\"ahmed\",\n\t  \"email\":\"abce@cdomain.com\",\n\t    \"password\":\"password\",\n\t    \"appUserZiele\":\"GEWICHT_VERLIEREN\",\n\t    \"appUserRole\":\"NORMAL\",\n\t    \"gewicht\":122,\n\t    \"groesse\":123,\n\t\"geburtsdatum\": \"2022-12-01\",\n\t    \"gender\":\"FEMALE\"\n}"
 				},
-				"description": "Replace this test by your own test requests"
+				"url": {
+					"raw": "http://localhost:8080/api/v1/registration",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"registration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/user/login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\":\"ab@domain.com\",\n\t\"password\":\"password\",\n\t\"role\":\"ADMIN\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/v1/registration",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n\t\"name\":\"daniels\",\n\t\"userName\":\"ahmed\",\n\t  \"email\":\"abce@cdomain.com\",\n\t    \"password\":\"password\",\n\t    \"appUserZiele\":\"GEWICHT_VERLIEREN\",\n\t    \"appUserRole\":\"NORMAL\",\n\t    \"gewicht\":122,\n\t    \"groesse\":123,\n\t\"geburtsdatum\": \"2022-12-01\",\n\t    \"gender\":\"FEMALE\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/51/settings",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"51",
+						"settings"
+					]
+				}
 			},
 			"response": []
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
+
+
 }
