@@ -2,7 +2,6 @@ package com.example.demo.inbound;
 
 import com.example.demo.inbound.messaging.Config;
 import com.example.demo.inbound.security.JwtTokenProvider;
-import com.example.demo.inbound.security.JwtUtil;
 import com.example.demo.model.appuser.AppUser;
 import com.example.demo.model.appuser.AppUserService;
 import com.example.demo.model.appuser.Role;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path="api/v1/registration")
 @AllArgsConstructor
 public class RegistrationController {
-    private JwtUtil jwtTokenUtil;
     private JwtTokenProvider jwtTokenProvider;
     private final AppUserService appUserService;
     private AuthenticationManager authenticationManager;
