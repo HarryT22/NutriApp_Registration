@@ -73,7 +73,7 @@ private BCryptPasswordEncoder bCryptPasswordEncoder;
             AppUser appUser = appUserRepo.findByEmail(email).get();
             return appUser.getRole();
         } catch (Exception e) {
-            throw new IllegalStateException("Invalid username or password.");
+            throw new IllegalStateException("Invalid Email or Password.");
         }
 
     }
@@ -86,7 +86,7 @@ private BCryptPasswordEncoder bCryptPasswordEncoder;
     public boolean emailNotTaken(String email){
         boolean userExists = appUserRepo.findByEmail(email).isPresent();
         if(userExists){
-            throw  new IllegalStateException("Email schon belegt");
+            throw  new UserAllreadyExist("Email schon belegt");
         }
         return true;
     }

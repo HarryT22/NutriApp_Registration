@@ -34,7 +34,12 @@ public class EmailService implements EmailSender {
             mailSender.send(message);
         }catch (MailException e){
             LOGGER.error("failed",e);
-            throw new IllegalStateException("faikled");
+            throw new MailException("failed to Send Email") {
+                @Override
+                public String getMessage() {
+                    return super.getMessage();
+                }
+            };
         }
 
 

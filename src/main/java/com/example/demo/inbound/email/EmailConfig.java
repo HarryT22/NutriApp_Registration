@@ -13,8 +13,8 @@ public class EmailConfig
     public JavaMailSender getJavaMailSender()
     {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("localhost");
-        mailSender.setPort(1025);
+        mailSender.setHost("mail.fh-muenster.de");
+        mailSender.setPort(25);
 
         mailSender.setUsername("hello");
         mailSender.setPassword("password");

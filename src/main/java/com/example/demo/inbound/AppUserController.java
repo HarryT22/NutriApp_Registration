@@ -1,6 +1,7 @@
 package com.example.demo.inbound;
 
 import com.example.demo.inbound.security.JwtTokenProvider;
+import com.example.demo.model.NoAuthorizedException;
 import com.example.demo.model.appuser.AppUser;
 import com.example.demo.model.appuser.AppUserRepo;
 import com.example.demo.model.appuser.AppUserService;
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path="user")
+@RequestMapping("/rest")
 @AllArgsConstructor
 public class AppUserController {
    private final AppUserService  appUserService;
@@ -84,8 +85,8 @@ public String login(@RequestBody loginRequest request) {
 
 
         @GetMapping("/{id}")
-public ResponseEntity<String> getUser(@PathVariable("id") long id) throws IllegalAccessError{
+public ResponseEntity<String> getUser(@PathVariable("id") long id) throws IllegalAccessError, NoAuthorizedException {
    if(appUserService.isAdmin(id)){
 return ResponseEntity.ok().body(appUserService.getUserName(id));}
-else{throw new IllegalAccessError("no Authorization"); }
+else{throw new NoAuthorizedException("no Authorization"); }
 }}

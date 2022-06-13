@@ -36,11 +36,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.authorizeRequests()
-                .antMatchers("/api/v1/registration").permitAll()
-                .antMatchers("/user/login").permitAll()
+                .antMatchers("/rest/registration").permitAll()
+                .antMatchers("/rest/login").permitAll()
                 .antMatchers("/actuator/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
-                .antMatchers("/user/{id}/settings").permitAll()
+                .antMatchers("/rest/{id}/settings").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
